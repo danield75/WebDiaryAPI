@@ -33,6 +33,7 @@ namespace WebDiaryAPI.Controllers
 
             return diaryEntry;
         }
+
         [HttpPost]
         public async Task<ActionResult<DiaryEntry>> AddDiaryEntry(DiaryEntry diaryEntry)
         {
@@ -74,6 +75,22 @@ namespace WebDiaryAPI.Controllers
                     throw;
                 }
             }
+
+            return NoContent();
+        }
+
+        // DELETE: api/DiaryEntries/7
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteDiaryEntry(int id)
+        {
+            DiaryEntry? diaryEntry = await _context.DiaryEntries.FindAsync(id);
+            if (diaryEntry == null)
+            {
+                return NotFound();
+            }
+
+            _context.DiaryEntries.Remove(diaryEntry);
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
