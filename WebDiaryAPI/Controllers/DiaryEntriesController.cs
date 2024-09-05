@@ -26,13 +26,25 @@ namespace WebDiaryAPI.Controllers
         public async Task<ActionResult<DiaryEntry>> GetDiaryEntry(int id)
         {
             DiaryEntry? diaryEntry = await _context.DiaryEntries.FindAsync(id);
-
             if (diaryEntry == null)
             {
                 return NotFound();
             }
 
             return diaryEntry;
+        }
+        [HttpPost]
+        public async Task<ActionResult<DiaryEntry>> AddDiaryEntry(DiaryEntry diaryEntry)
+        {
+            diaryEntry.Id = 0;
+
+            _context.DiaryEntries.Add(diaryEntry);
+
+            await _context.SaveChangesAsync();
+
+            string? resourceUrl = Url.Action(nameof(GetDiaryEntry), new { id = diaryEntry.Id });
+
+            return Created(resourceUrl, diaryEntry);
         }
     }
 }
