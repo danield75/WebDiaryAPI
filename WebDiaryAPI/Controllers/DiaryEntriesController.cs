@@ -1,11 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using WebDiaryAPI.Authentication;
 using WebDiaryAPI.Data;
 using WebDiaryAPI.Models;
 
 namespace WebDiaryAPI.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class DiaryEntriesController : ControllerBase
     {
@@ -79,6 +82,7 @@ namespace WebDiaryAPI.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = UserRoles.Admin)]
         // DELETE: api/DiaryEntries/7
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDiaryEntry(int id)
